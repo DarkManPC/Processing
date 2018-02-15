@@ -1,0 +1,72 @@
+int l = 40 ;
+int sw = 601;
+int sh = 601;
+int w = sw / l;
+int h = sh / l;
+
+
+void setup() {
+  size(601, 601);
+  background(255);
+}
+
+cell[][] grid = createGrid();
+
+void draw() {
+  for (int i = 0; i < w; i++) {
+    for (int j = 0; j < h; j++) {
+      show(grid[i][j], grid[i][j].x, grid[i][j].y);
+    }
+  }
+}
+
+cell[][] createGrid() {
+  cell[][] grid = new cell[w][h];
+  for (int i = 0; i < w; i++) {
+    for (int j = 0; j < h; j++) {
+      grid[i][j] = new cell (i, j, l);
+    }
+  }
+  return grid;
+}
+
+void show(cell c, int x, int y) {
+
+  if (c.reveal) {
+
+    noFill();
+    stroke(0);
+    rect(x*l, y*l, l, l);
+
+    if (c.mine) {
+      fill(100);
+      noStroke();
+      ellipse(x*l+l/2, y*l+l/2, l/2, l/2);
+    }
+    else {
+      fill(0);
+      textSize(l - (l/5));
+      text(neighbour(c), x*l, y*l+l-(l/10));
+    }
+  } else {
+
+    fill(160);
+    stroke(0);
+    rect(x*l, y*l, l, l);
+  }
+}
+
+String neighbour(cell c) {
+  int resultat = 0;
+  String s = new String();
+  for (int i = c.x - 1; i < c.x+2 && i > -1 && i < w; i++) {
+    for (int j = c.y - 1; j < c.y+2 && j > -1 && j < h; j++) {
+      if (grid[i][j].mine){
+        resultat++;
+      }
+    }
+  }
+  s = Integer.toString(resultat);
+  println(s);
+  return s;
+}
